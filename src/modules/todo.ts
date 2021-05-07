@@ -1,31 +1,22 @@
-const ADD_TODO = 'todos/ADD_TODO' as const
-const TOGGLE_TODO = 'todos/TOGGLE_TODO' as const
-const REMOVER_TODO = 'todos/REMOVER_TODO' as const
+import {createAction, ActionType, } from 'typesafe-actions'
+
+const ADD_TODO = 'todos/ADD_TODO' 
+const TOGGLE_TODO = 'todos/TOGGLE_TODO' 
+const REMOVER_TODO = 'todos/REMOVER_TODO' 
 
 let nextId = 1
 
-export const addTodo = (text: string) => ({
-    type: ADD_TODO,
-    payload: {
-      id: nextId+= 1,
-      text
-    }
-  });
+export const addTodo = createAction(ADD_TODO, action =>(text: string) => action({
+    id : nextId++,
+    text
+}))
 
-export const toggleTodo = (id: number) => ({
-    type: TOGGLE_TODO,
-    payload: id
-})
+export const toggleTodo = createAction(TOGGLE_TODO)<number>()
+export const removeTodo = createAction(REMOVER_TODO)<number>()
 
-export const removeTodo = (id: number) => ({
-    type: REMOVER_TODO,
-    payload: id
-})
 
-type TodosAction = 
-    | ReturnType<typeof addTodo>
-    | ReturnType<typeof toggleTodo>
-    | ReturnType<typeof removeTodo>
+const actions = {addTodo, toggleTodo, removeTodo}
+type TodosAction = ActionType<typeof actions>
 
 
 export type Todo ={
@@ -54,5 +45,7 @@ function todos(state: TodosState = initialState, action:TodosAction): TodosState
         return state
         }
 }
+
+
 
 export default todos
